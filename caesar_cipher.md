@@ -67,7 +67,7 @@ $ ./caesar_cipher.py e 5 --file input_msg.txt --write output2.txt
 
 ## Spec
 
-The only things which should be alterred in the assignment repository are of "caesar_cipher.py" and "README.txt". Do not change the test files! 
+The only things which should be alterred in the assignment repository are of "caesar_cipher.py" and "README.md". Do not change the test files! 
 
 To ensure the tests will work, make sure:
 
@@ -80,8 +80,8 @@ To ensure the tests will work, make sure:
 
 All the above can be checked by running the tests. The tests will fail if the above conditions are not followed.
 
-The README.txt file is what someone should read when first taking a look at
-your code. It should be a plain-text file formatted similarly to this one. It should
+The README.md file is what someone should read when first taking a look at
+your code. It should be a mark down file formatted similarly to this one. It should
 contain the following:
 
 - Author and date that the code was created.
@@ -92,4 +92,4 @@ contain the following:
 
 The submission deadline is **1200 on Tuesday 18th February**.
 
-To submit your code you need to make sure your final version is pushed back to the github classroom repository and you submit a pull request.... **Add more info here.**
+To submit your code you need to make sure your final version is pushed back to the github classroom repository by the deadline. 
