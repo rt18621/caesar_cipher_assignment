@@ -1,132 +1,95 @@
-#!/usr/bin/python3
-import string
+# Assignment 1 - Caesar Cipher with Command Line Input
 
-# Constants
-MAX_KEY_SIZE = 26
-ALPHABET = (string.ascii_uppercase)
-PUNCTUATION = string.punctuation
+This is an individual python assignment revisiting the caesar cipher from semester 1 and adapt it to use command line input (CLI). A model solution for the caesar cipher using interactive user input will be available on a github repository.
 
+## Tasks
 
-"""
-User input functions
-"""
+Your tasks are:
 
-def get_cipher_mode():
-    """
-    Gets user input for the cipher mode. Must be either encrypt, e, decrypt or d.
-    
-    Returns cipher_mode as a string.
-    """
-    while True:
-        cipher_mode = input("Do you wish to encrypt or decrypt? ").lower()
-        if cipher_mode in "encrypt e decrypt d".split():
-            return cipher_mode
-        else:
-            print("Enter either 'encrypt' or 'e' or 'decrypt' or 'd'. ")
+1. Register for the assignment in github classroom and clone the assignment1 repository to have a local copy.
 
+2. Adapt the code so that the cipher now preserves case, e.g. Hello World! -> Mjqqt Btwqi! when encrypted with a shift of 5
 
-def get_shift_value():
-    """
-    Gets user input for the shift value. Must be a positive integer.
-    
-    Returns shift_value as an int.
-    """
-    while True:
-        shift_value = input("Enter the shift value: ")
-        if not shift_value.isdigit():
-            print("Enter a positive integer")
-        elif int(shift_value) < 0:
-            print("Enter a positive integer")
-        else:
-            return int(shift_value)
+3. Change the code so that instead of interactive user input, the code now takes commmand line input (CLI). Your program will be called "caesar_cipher.py" and the CLI should work as follows:
 
+```
+$ ./caesar_cipher.py
+usage: 
+./caesar_cipher.py (e|d) <shift> <text>
 
-def get_msg():
-    """
-    Gets user input for the text. It continues reading in input until the user
-    inputs an empty line (i.e. double enter).
-    """
-    line = input("Enter your message:")
-    msg = ""
+Examples:
+./caesar_cipher.py e <shift> <text>
+./caesar_cipher.py d <shift> <text>
+$ ./caesar_cipher.py e 5 Hello World!
+Mjqqt Btwqi!
+$ ./caesar_cipher.py d 5 Mjqqt Btwqi!
+Hello World!
+```
 
-    while line != "":
-        msg += line
-        line = input()
-        
-    return msg
-    
-"""
-File usage functions
-"""
+In the case that the program is called with too few arguments, the output messages should be considerd as *error* messages. The usage message given above should be printed to the the standard error stream (`stderr`). To do this you write:
 
-def ret_file_msg(file_name):
-    pass
-        
-def write_msg_to_file(file_name, msg):
-    pass
-    
-"""
-Cipher functions
-"""
+```python
+print("This is an error message\n", file=sys.stderr)
+```
 
-def translate_msg(shift_value, msg):
-    """
-    Performs the Caesar cipher on a string converted to upper case with the given shift.
-    
-    shift_value : int
-        shift amount/rotation value for the cipher. Positive encrypts and negative decrypts.
-    msg : str
-        message to be translated
-    
-    Returns the translated message as a string.
-    """
-    translated_msg = ''
+4. Tests are included and can be run by calling `python -m pytest` in the same directory as the "caesar_cipher.py" file. Make sure to run these tests regularly to identify any problems with the code that need fixing.
 
-    for symbol in msg.upper():
-        # Need to check Symbol is a letter
-        if symbol.isalpha():
-            position = ALPHABET.index(symbol)
-            new_symbol = ALPHABET[(position + shift_value) % MAX_KEY_SIZE]
-            translated_msg += new_symbol
-        else:
-            # Leave Symbol unchanged if it's not a letter
-            translated_msg += symbol
+N.B. The outcome of these tests will be used to mark the assignments. You *must* use the tests or you will end up not following the intructions correctly and your submission will be incorrect in some way. If you have trouble using the tests then ask for help - do *not* simply ignore the tests! 
 
-    return translated_msg
-    
+### Extension
 
-def caesar_encrypt(shift_value, msg):
-    """
-    Wrapper function for translate_msg
-    
-    N.B. shift value kept positive for encryption.
-    """
-    return translate_msg(shift_value, msg)
-    
+An extension to the assignment is to add file read and write capabilities to the caesar cipher code.
 
-def caesar_decrypt(shift_value, msg):
-    """
-    Wrapper function for translate_msg
-    
-    N.B. shift value becomes negative for decryption.
-    """
-    return translate_msg(-shift_value, msg)
+1. Complete the `ret_file_msg` function so that it returns the contents of a file as a string if the file exists, otherwise it returns a `FileNotFoundError`.
 
-"""
-Main function
-"""
-def main():
-    mode = get_cipher_mode()
-    shift = get_shift_value()    
-    text = get_msg()
-    
-    if mode[0] == "e":
-        translated_msg = caesar_encrypt(shift, msg)
-    else:
-        translated_msg = caesar_decrypt(shift, msg)
-        
-    print(translated_msg)
+2. Complete the `write_msg_to_file` function so that it writes the `msg` string to the specified file.
 
+3. Add these capabilities to the CLI so that it now works:
+```
+$ ./caesar_cipher.py
+usage: 
+./caesar_cipher.py (e|d) <shift> (<text>|--file <infile>) [--write <outfile>]
 
-if __name__ == '__main__':
-    main()
+Examples:
+./caesar_cipher.py e <shift> <text>
+./caesar_cipher.py d <shift> <text>
+./caesar_cipher.py d <shift> --file <filename>
+./caesar_cipher.py d <shift> --file <filename>
+$ ./caesar_cipher.py e 5 Hello World!
+Mjqqt Btwqi!
+$ ./caesar_cipher.py d 5 Mjqqt Btwqi!
+Hello World!
+$ ./caesar_cipher.py d 5 Mjqqt Btwqi! --write output1.txt
+$ ./caesar_cipher.py e 5 --file input_msg.txt
+Mjqqt Btwqi!
+$ ./caesar_cipher.py e 5 --file input_msg.txt --write output2.txt
+```
+
+## Spec
+
+The only things which should be alterred in the assignment repository are of "caesar_cipher.py" and "README.txt". Do not change the test files! 
+
+To ensure the tests will work, make sure:
+
+- Your code file is called "caesar_cipher.py".
+- The following functions exist, with unalterred names or argument positions:
+    - `caesar_encrypt(shift_value, msg)`
+    - `caesar_decrypt(shift_value, msg)`
+    - `ret_file_msg(file_name)`
+    - `write_msg_to_file(file_name, msg)`
+
+All the above can be checked by running the tests. The tests will fail if the above conditions are not followed.
+
+The README.txt file is what someone should read when first taking a look at
+your code. It should be a plain-text file formatted similarly to this one. It should
+contain the following:
+
+- Author and date that the code was created.
+- A short description of what the code does
+- How to use the code and examples of output
+
+## Submission
+
+The submission deadline is **1200 on Tuesday 18th February**.
+
+To submit your code you need to make sure your final version is pushed back to the github classroom repository and you submit a pull request.... **Add more info here.**
