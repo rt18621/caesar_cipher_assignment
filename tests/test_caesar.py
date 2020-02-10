@@ -1,6 +1,8 @@
 import pytest
 from caesar_cipher import caesar_encrypt, caesar_decrypt, ret_file_msg, write_msg_to_file
 from subprocess import Popen, PIPE
+import sys
+import re
 
 MODULE_NAME = "caesar_cipher"
 
@@ -27,11 +29,17 @@ def file_output(tmpdir):
 
 
 def run_program(args):
-    proc = Popen(args, stdout=PIPE, stderr=PIPE)
-    stdout, stderr = proc.communicate()
-    return stdout.decode('utf8'), stderr.decode('utf8'), proc.returncode
-
+    try:
+        proc = Popen(args, stdout=PIPE, stderr=PIPE)
+    except OSError:
+        args[0] = args[0].strip("./")
+        proc = Popen([sys.executable] + args, stdout=PIPE, stderr=PIPE)
     
+    stdout, stderr = proc.communicate()
+    return normalize_newlines(stdout.decode('utf8')), normalize_newlines(stderr.decode('utf8')), proc.returncode
+
+def normalize_newlines(string):
+    return re.sub(r'(\r\n|\r|\n)', '\n', string)
 """
 Tests to check cipher functions work
 """
